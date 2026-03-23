@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Cumpleaños</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: #f0f8ff;
+        }
+
+        input, button {
+            margin: 5px;
+            padding: 10px;
+        }
+
+        li {
+            margin: 10px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎂 Registro de Cumpleaños</h1>
+
+    <input type="text" id="nombre" placeholder="Nombre Completo">
+    <input type="date" id="fecha">
+    <button onclick="agregarCumple()">Agregar</button>
+
+    <h2>Lista</h2>
+    <ul id="lista"></ul>
+
+<script>
+
+let cumpleaños = [];
+
+// 🔹 CARGAR DATOS
+let datosGuardados = localStorage.getItem("cumpleaños");
+
+if (datosGuardados) {
+    cumpleaños = JSON.parse(datosGuardados);
+    mostrarLista();
+}
+
+// 🔹 AGREGAR
+function agregarCumple() {
+
+    let nombre = document.getElementById("nombre").value;
+    let fecha = document.getElementById("fecha").value;
+
+    if (nombre === "" || fecha === "") {
+        alert("Completa todos los campos");
+        return;
+    }
+
+    let persona = {
+        nombre: nombre,
+        fecha: fecha
+    };
+
+    cumpleaños.push(persona);
+
+    // 💾 GUARDAR
+    localStorage.setItem("cumpleaños", JSON.stringify(cumpleaños));
+
+    // 🎉 VERIFICAR SI CUMPLE HOY
+    let hoy = new Date().toISOString().slice(5,10);
+    let cumple = fecha.slice(5,10);
+
+    if (cumple === hoy) {
+        alert("🎉 Hoy cumple " + nombre);
+    }
+
+    mostrarLista();
+
+    // 🧹 LIMPIAR
+    document.getElementById("nombre").value = "";
+    document.getElementById("fecha").value = "";
+}
+
+// 🔹 ELIMINAR
+function eliminarCumple(indice) {
+    cumpleaños.splice(indice, 1);
+
+    localStorage.setItem("cumpleaños", JSON.stringify(cumpleaños));
+
+    mostrarLista();
+}
+
+// 🔹 MOSTRAR
+function mostrarLista() {
+
+    let lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    cumpleaños.forEach((persona, index) => {
+
+        // ✅ SOLUCIÓN SIN ERROR DE FECHA
+        let partes = persona.fecha.split("-");
+        let fechaBonita = partes[2] + "/" + partes[1] + "/" + partes[0];
+
+        let item = document.createElement("li");
+
+        item.innerHTML = `
+            ${persona.nombre} - ${fechaBonita}
+            <button onclick="eliminarCumple(${index})">❌</button>
+        `;
+
+        lista.appendChild(item);
+    });
+}
+
+</script>
+
+</body>
+</html>
