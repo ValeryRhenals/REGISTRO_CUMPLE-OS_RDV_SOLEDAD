@@ -1,0 +1,16 @@
+{
+    "vale": {
+        "id": "vale",
+        "nombre": "34",
+        "edad": "24",
+        "plan": "lkjhgfd",
+        "estado": "jhgf"
+    },
+    "123": {
+        "id": "123",
+        "nombre": "VALE",
+        "edad": "345",
+        "plan": "kjhgf",
+        "estado": "hgfd"
+    }
+}
